@@ -5,10 +5,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.crypto.SecretKey;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 import com.proyect.guarderia.model.Usuario;
 import com.proyect.guarderia.respository.repositoryUsuario;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
 @RestController
 @RequestMapping("/api")
@@ -17,6 +26,8 @@ public class UsuarioController {
     @Autowired
     private repositoryUsuario repository;
 
+    private static final String SECRET_KEY = "qbk6qk>1Z79fW8tS*ZARL{C93%!tVDu)";
+
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody Usuario usuario) {
         String u = usuario.getUsuario();
@@ -24,20 +35,42 @@ public class UsuarioController {
 
         Usuario user = repository.findByUsuario(u);              
         if (user !=null  && BCrypt.checkpw(p, user.getPassword())) {
-            Object response = new Object() {
-                public final String status = "OK";
-                public final String message = "Usuario autenticado correctamente";
-                public final int code = HttpStatus.ACCEPTED.value();
-            };
+            
+            String token = generateJwtToken(user.getDk());
+            // Construir la respuesta con el token
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "OK");
+            response.put("message", "Usuario autenticado correctamente");
+            response.put("code", HttpStatus.ACCEPTED.value());
+            response.put("token", token);
             return ResponseEntity.ok(response);
+            // Object response = new Object() {
+            //     public final String status = "OK";
+            //     public final String message = "Usuario autenticado correctamente";
+            //     public final int code = HttpStatus.ACCEPTED.value();
+            // };
+            // return ResponseEntity.ok(response);
         } else {
-            Object response = new Object() {
-                public final String status = "error";
-                public final String message = p + "\n" + user.getPassword();
-                public final int code = HttpStatus.UNAUTHORIZED.value();
-            };
+            // Construir la respuesta de error
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "error");
+            response.put("message", "Contraseña incorrecta o usuario no existe, por favor verifique e intente de nuevo");
+            response.put("code", HttpStatus.UNAUTHORIZED.value());
             return ResponseEntity.ok(response);
         }
+    }
+
+    private String generateJwtToken(int dk) {
+        Date now = new Date();
+            Date expiryDate = new Date(now.getTime() + 864000000); 
+            SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+            
+            return Jwts.builder()
+                    .setSubject(Integer.toString(dk))
+                    .setIssuedAt(now)
+                    .setExpiration(expiryDate)
+                    .signWith(key)
+                    .compact();
     }
 
     @PostMapping("/register")
