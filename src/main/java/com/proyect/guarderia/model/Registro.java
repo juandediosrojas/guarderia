@@ -1,31 +1,41 @@
 package com.proyect.guarderia.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="registros")
 public class Registro {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int dk;
-    private int mascota_fk;
-    private int cliente_fk;
-    private LocalDateTime fecha_entrada;
-    private LocalDateTime fecha_salida;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mascota_fk")
+    private Mascota mascota;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_fk")
+    private Cliente cliente;
+
+    private Date fechaEntrada;
+    private Date fechaSalida;
 
     public Registro() {
     }
 
-    public Registro(int dk, int mascota_fk, int cliente_fk, LocalDateTime fecha_entrada, LocalDateTime fecha_salida) {
+    public Registro(int dk, Mascota mascota, Cliente cliente, Date fechaEntrada, Date fechaSalida) {
         this.dk = dk;
-        this.mascota_fk = mascota_fk;
-        this.cliente_fk = cliente_fk;
-        this.fecha_entrada = fecha_entrada;
-        this.fecha_salida = fecha_salida;
+        this.mascota = mascota;
+        this.cliente = cliente;
+        this.fechaEntrada = fechaEntrada;
+        this.fechaSalida = fechaSalida;
     }
 
     public int getDk() {
@@ -36,37 +46,35 @@ public class Registro {
         this.dk = dk;
     }
 
-    public int getMascota_fk() {
-        return mascota_fk;
+    public Mascota getMascota_fk() {
+        return mascota;
     }
 
-    public void setMascota_fk(int mascota_fk) {
-        this.mascota_fk = mascota_fk;
+    public void setMascota_fk(Mascota mascota) {
+        this.mascota = mascota;
     }
 
-    public int getCliente_fk() {
-        return cliente_fk;
+    public Cliente getCliente_fk() {
+        return cliente;
     }
 
-    public void setCliente_fk(int cliente_fk) {
-        this.cliente_fk = cliente_fk;
+    public void setCliente_fk(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    public LocalDateTime getFecha_entrada() {
-        return fecha_entrada;
+    public Date getFechaEntrada() {
+        return fechaEntrada;
     }
 
-    public void setFecha_entrada(LocalDateTime fecha_entrada) {
-        this.fecha_entrada = fecha_entrada;
+    public void setFechaEntrada(Date fechaEntrada) {
+        this.fechaEntrada = fechaEntrada;
     }
 
-    public LocalDateTime getFecha_salida() {
-        return fecha_salida;
+    public Date getFechaSalida() {
+        return fechaSalida;
     }
 
-    public void setFecha_salida(LocalDateTime fecha_salida) {
-        this.fecha_salida = fecha_salida;
+    public void setFechaSalida(Date fechaSalida) {
+        this.fechaSalida = fechaSalida;
     }
-
-    
 }

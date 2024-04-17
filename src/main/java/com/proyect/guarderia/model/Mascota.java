@@ -1,6 +1,5 @@
 package com.proyect.guarderia.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;

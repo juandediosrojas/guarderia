@@ -41,15 +41,9 @@ public class UsuarioController {
             Map<String, Object> response = new HashMap<>();
             response.put("status", "OK");
             response.put("message", "Usuario autenticado correctamente");
-            response.put("code", HttpStatus.ACCEPTED.value());
+            response.put("code", HttpStatus.OK.value());
             response.put("token", token);
             return ResponseEntity.ok(response);
-            // Object response = new Object() {
-            //     public final String status = "OK";
-            //     public final String message = "Usuario autenticado correctamente";
-            //     public final int code = HttpStatus.ACCEPTED.value();
-            // };
-            // return ResponseEntity.ok(response);
         } else {
             // Construir la respuesta de error
             Map<String, Object> response = new HashMap<>();
