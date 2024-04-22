@@ -9,17 +9,16 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cliente_dk;
-    private String identificacion_cliente;
+    private String identificacion;
     private String nombres_cliente;
     private String apellidos_cliente;
     private String direccion;
     private String correo;
     private long celular;
     
-    public Cliente(int cliente_dk, String identificacion_cliente, String nombres_cliente, String apellidos_cliente,
+    public Cliente(String identificacion_cliente, String nombres_cliente, String apellidos_cliente,
             String direccion, String correo, long celular) {
-        this.cliente_dk = cliente_dk;
-        this.identificacion_cliente = identificacion_cliente;
+        this.identificacion = identificacion_cliente;
         this.nombres_cliente = nombres_cliente;
         this.apellidos_cliente = apellidos_cliente;
         this.direccion = direccion;
@@ -38,12 +37,12 @@ public class Cliente {
         this.cliente_dk = cliente_dk;
     }
 
-    public String getIdentificacion_cliente() {
-        return identificacion_cliente;
+    public String getIdentificacion() {
+        return identificacion;
     }
 
-    public void setIdentificacion_cliente(String identificacion_cliente) {
-        this.identificacion_cliente = identificacion_cliente;
+    public void setIdentificacion(String identificacion_cliente) {
+        this.identificacion = identificacion_cliente;
     }
 
     public String getNombres_cliente() {

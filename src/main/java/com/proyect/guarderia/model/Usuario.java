@@ -1,8 +1,7 @@
 package com.proyect.guarderia.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="usuarios")
@@ -12,16 +11,20 @@ public class Usuario {
     private int dk;
     private String usuario; 
     private String password;
-    private int empleado_fk;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empleado_fk")
+    private Empleado empleado;
 
     public Usuario() {
     }
 
-    public Usuario(int dk, String usuario, String password, int empleado_fk) {
+    public Usuario(int dk, String usuario, String password, Empleado empleado) {
         this.dk = dk;
         this.usuario = usuario;
         this.password = password;
-        this.empleado_fk = empleado_fk;
+        this.empleado = empleado;
     }
 
     public int getDk() {
@@ -48,13 +51,14 @@ public class Usuario {
         this.password = password;
     }
 
-    public int getEmpleado_fk() {
-        return empleado_fk;
+    public Empleado getEmpleado_fk() {
+        return empleado;
     }
 
-    public void setEmpleado_fk(int empleado_fk) {
-        this.empleado_fk = empleado_fk;
+    public void setEmpleado_fk(Empleado empleado) {
+        this.empleado = empleado;
     }
+
 
     
 }

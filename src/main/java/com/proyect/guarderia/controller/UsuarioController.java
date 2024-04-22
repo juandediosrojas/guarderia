@@ -43,6 +43,7 @@ public class UsuarioController {
             response.put("message", "Usuario autenticado correctamente");
             response.put("code", HttpStatus.OK.value());
             response.put("token", token);
+            response.put("usuario", user);
             return ResponseEntity.ok(response);
         } else {
             // Construir la respuesta de error
@@ -71,7 +72,6 @@ public class UsuarioController {
     public ResponseEntity<Object> register(@RequestBody Usuario usuario) {
         String u = usuario.getUsuario();
         String p = usuario.getPassword();
-        int idEmpleado = usuario.getEmpleado_fk();
 
         try {
             Usuario existingUser = repository.findByUsuario(u);
@@ -90,7 +90,7 @@ public class UsuarioController {
             Usuario newUser = new Usuario();
             newUser.setUsuario(u);
             newUser.setPassword(hashedPassword);
-            newUser.setEmpleado_fk(idEmpleado);
+            newUser.setEmpleado_fk(usuario.getEmpleado_fk());
 
             // Save the user to the repository
             repository.save(newUser);

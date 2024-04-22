@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,57 +21,48 @@ import com.proyect.guarderia.respository.repositoryRegistro;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT })
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 public class RegistroController {
+
+    private ResponseEntity<Map<String, Object>> createResponse(String status, HttpStatus code, String message) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", status);
+        response.put("message", message);
+        response.put("code", code.value());
+        return ResponseEntity.ok(response);
+    }
+    
 
     @Autowired
     private repositoryRegistro repositoryRegistro;
 
     @GetMapping("/registros")
-    public java.util.List<Registro> registrosSinSalida() {
-        return repositoryRegistro.findByFechaSalidaIsNull();
+    public java.util.List<Registro> all() {
+        return repositoryRegistro.findAll();
     }
 
-    @PutMapping("/registros/{dk}")
-    public ResponseEntity<Map<String, Object>> update(@PathVariable int dk, @RequestBody String requestBody) throws JsonMappingException, JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> requestData = mapper.readValue(requestBody, Map.class);
-        String fechaSalidaString = (String) requestData.get("fecha_salida");
+    // @PostMapping("/registros")
+    // public ResponseEntity<Object> createRegistro(@RequestBody String body) {
         
-        System.out.println("Fecha de salida: " + fechaSalidaString);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date fecha_salida = null;
-        try {
-            fecha_salida = new Date(dateFormat.parse(fechaSalidaString).getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Fecha de salida: " + fecha_salida);
+    // }
 
-        Optional<Registro> registro = repositoryRegistro.findById(dk);
-        if (!registro.isPresent()) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("status", "error");
-            response.put("message", "Registro no encontrado");
-            response.put("code", HttpStatus.NOT_FOUND.value());
-            return ResponseEntity.ok(response);
-        } else {
-            Registro r = repositoryRegistro.findById(dk).get();
-            r.setFechaSalida(fecha_salida);
-            Registro resgistroGuardado = repositoryRegistro.save(r);
-            if (resgistroGuardado != null) {
-                Map<String, Object> response = new HashMap<>();
-                response.put("status", "OK");
-                response.put("message", "Salida registrada correctamente");
-                response.put("code", HttpStatus.OK.value());
-                return ResponseEntity.ok(response);
-            } else {
-                Map<String, Object> response = new HashMap<>();
-                response.put("status", "error");
-                response.put("message", "Error al registrar la salida");
-                response.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
-                return ResponseEntity.ok(response);
+    @DeleteMapping("/registros/{dk}")
+    public ResponseEntity<Object> deleteMascota(@PathVariable String dk) {
+        Registro registro = repositoryRegistro.findByDk(Integer.parseInt(dk));
+        if (registro != null) {
+            try {
+                repositoryRegistro.delete(registro);
+                return ResponseEntity.ok("La mascota " + registro.getMascota_fk().getNombre() + " ha salido de la guardería");
+            } catch (DataIntegrityViolationException e) {
+                String mensajeError = "No se puede dar salida a la " + registro.getMascota_fk().getNombre() 
+                    + " porque está asociado a un registro.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensajeError);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al dar salida a la mascota");
             }
-        }
+        } else {
+            String mensajeError = "La mascota no se existe.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
+        }       
     }
 }

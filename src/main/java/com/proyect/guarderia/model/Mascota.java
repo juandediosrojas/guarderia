@@ -12,23 +12,23 @@ public class Mascota {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int dk;
-    private int identifiacion_mascota;
-    private String nombre_mascota;
-    private String especie_mascota;
-    private String raza_mascota;
+    private int identifiacion;
+    private String nombre;
+    private String especie;
+    private String raza;
     
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_fk")
+    @JoinColumn(name = "cliente")
     private Cliente cliente;
 
-    public Mascota(int dk, int identifiacion_mascota, String nombre_mascota, String especie_mascota,
-            String raza_mascota, Cliente cliente) {
+    public Mascota(int dk, int identifiacion, String nombre, String especie,
+            String raza, Cliente cliente) {
         this.dk = dk;
-        this.identifiacion_mascota = identifiacion_mascota;
-        this.nombre_mascota = nombre_mascota;
-        this.especie_mascota = especie_mascota;
-        this.raza_mascota = raza_mascota;
+        this.identifiacion = identifiacion;
+        this.nombre = nombre;
+        this.especie = especie;
+        this.raza = raza;
         this.cliente = cliente;
     }
 
@@ -44,36 +44,36 @@ public class Mascota {
         this.dk = dk;
     }
 
-    public int getIdentifiacion_mascota() {
-        return identifiacion_mascota;
+    public int getIdentifiacion() {
+        return identifiacion;
     }
 
-    public void setIdentifiacion_mascota(int identifiacion_mascota) {
-        this.identifiacion_mascota = identifiacion_mascota;
+    public void setIdentifiacion(int identifiacion_mascota) {
+        this.identifiacion = identifiacion_mascota;
     }
 
-    public String getNombre_mascota() {
-        return nombre_mascota;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNombre_mascota(String nombre_mascota) {
-        this.nombre_mascota = nombre_mascota;
+    public void setNombre(String nombre_mascota) {
+        this.nombre = nombre_mascota;
     }
 
-    public String getEspecie_mascota() {
-        return especie_mascota;
+    public String getEspecie() {
+        return especie;
     }
 
-    public void setEspecie_mascota(String especie_mascota) {
-        this.especie_mascota = especie_mascota;
+    public void setEspecie(String especie_mascota) {
+        this.especie = especie_mascota;
     }
 
-    public String getRaza_mascota() {
-        return raza_mascota;
+    public String getRaza() {
+        return raza;
     }
 
-    public void setRaza_mascota(String raza_mascota) {
-        this.raza_mascota = raza_mascota;
+    public void setRaza(String raza_mascota) {
+        this.raza = raza_mascota;
     }
 
     public Cliente getCliente_fk() {

@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 public class Empleado {
 
     @Id
-    private int empleado_dk;
+    private int dk;
     private String identificacion_empleado;
     private String nombres_empleado;
     private String apellidos_empleado;
@@ -20,9 +20,9 @@ public class Empleado {
     public Empleado() {
     }
 
-    public Empleado(int empleado_dk, String identificacion_empleado, String nombres_empleado, String apellidos_empleado,
+    public Empleado(int dk, String identificacion_empleado, String nombres_empleado, String apellidos_empleado,
             String direccion, String correo, String celular) {
-        this.empleado_dk = empleado_dk;
+        this.dk = dk;
         this.identificacion_empleado = identificacion_empleado;
         this.nombres_empleado = nombres_empleado;
         this.apellidos_empleado = apellidos_empleado;
@@ -31,12 +31,12 @@ public class Empleado {
         this.celular = celular;
     }
 
-    public int getEmpleado_dk() {
-        return empleado_dk;
+    public int getDk() {
+        return dk;
     }
 
-    public void setEmpleado_dk(int empleado_dk) {
-        this.empleado_dk = empleado_dk;
+    public void setDk(int dk) {
+        this.dk = dk;
     }
 
     public String getIdentificacion_empleado() {
