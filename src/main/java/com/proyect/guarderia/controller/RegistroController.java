@@ -1,22 +1,14 @@
 package com.proyect.guarderia.controller;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+// import com.proyect.guarderia.model.Mascota;
 import com.proyect.guarderia.model.Registro;
+// import com.proyect.guarderia.respository.repository;
 import com.proyect.guarderia.respository.repositoryRegistro;
 
 @RestController
@@ -24,14 +16,8 @@ import com.proyect.guarderia.respository.repositoryRegistro;
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 public class RegistroController {
 
-    private ResponseEntity<Map<String, Object>> createResponse(String status, HttpStatus code, String message) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", status);
-        response.put("message", message);
-        response.put("code", code.value());
-        return ResponseEntity.ok(response);
-    }
-    
+
+    // private final repository mascotaRepository = null;
 
     @Autowired
     private repositoryRegistro repositoryRegistro;
@@ -41,10 +27,12 @@ public class RegistroController {
         return repositoryRegistro.findAll();
     }
 
-    // @PostMapping("/registros")
-    // public ResponseEntity<Object> createRegistro(@RequestBody String body) {
-        
-    // }
+    @PostMapping("/registros")
+    public ResponseEntity<Object> createRegistro(@RequestBody String body) {
+        System.out.println("Body de la solicitud: " + body);
+        String mensajeError = "La mascota no  existe." + body;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
+    }
 
     @DeleteMapping("/registros/{dk}")
     public ResponseEntity<Object> deleteMascota(@PathVariable String dk) {
@@ -61,7 +49,7 @@ public class RegistroController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al dar salida a la mascota");
             }
         } else {
-            String mensajeError = "La mascota no se existe.";
+            String mensajeError = "La mascota no  existe.";
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
         }       
     }

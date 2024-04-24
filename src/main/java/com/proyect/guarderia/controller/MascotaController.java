@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import com.proyect.guarderia.model.Mascota;
 import com.proyect.guarderia.respository.repository;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -24,6 +23,11 @@ public class MascotaController {
 
     @GetMapping("/mascotas")
     public java.util.List<Mascota> all(){return repository.findAll();}
+
+    @GetMapping("/mascotas/{identificacion}")
+    public Mascota mascota(@PathVariable String identificacion){
+        return repository.findByIdentifiacion(Integer.parseInt(identificacion));
+    }
 
     @GetMapping("/mascotasSinRegistro")
     public java.util.List<Mascota> mascotasSinRegistros(){
@@ -45,9 +49,6 @@ public class MascotaController {
             }
         }
     }
-
-    // @GetMapping("/mascotasParaIngresar")
-    // public java.util.List<Mascota> mascotaParaIngresar(){return repository.findDistinctByFechaSalidaIsNullAndFechaEntradaIsNullOrFechaSalidaIsNotNullAndFechaEntradaIsNotNull();}
     
     @DeleteMapping("/mascotas/{dk}")
     public ResponseEntity<Object> deleteMascota(@PathVariable String dk) {
