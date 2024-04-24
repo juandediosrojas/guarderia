@@ -1,16 +1,16 @@
 CREATE DATABASE `guarderiadb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 
 CREATE TABLE `cliente` (
-  `cliente_dk` int NOT NULL AUTO_INCREMENT,
+  `dk` int NOT NULL AUTO_INCREMENT,
   `identificacion` varchar(45) DEFAULT NULL,
   `nombres_cliente` varchar(45) DEFAULT NULL,
   `apellidos_cliente` varchar(45) DEFAULT NULL,
   `direccion` varchar(100) DEFAULT NULL,
   `correo` varchar(45) DEFAULT NULL,
   `celular` bigint DEFAULT NULL,
-  PRIMARY KEY (`cliente_dk`),
+  PRIMARY KEY (`dk`),
   UNIQUE KEY `identificacion_cliente_UNIQUE` (`identificacion`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `empleado` (
   `dk` int NOT NULL AUTO_INCREMENT,
@@ -33,8 +33,8 @@ CREATE TABLE `mascotas` (
   PRIMARY KEY (`dk`),
   UNIQUE KEY `identifiacion_mascota_UNIQUE` (`identifiacion`),
   KEY `cliente_fk_idx` (`cliente`),
-  CONSTRAINT `cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `cliente` (`cliente_dk`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `cliente_fk` FOREIGN KEY (`cliente`) REFERENCES `cliente` (`dk`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
 CREATE TABLE `registros` (
   `dk` int NOT NULL AUTO_INCREMENT,

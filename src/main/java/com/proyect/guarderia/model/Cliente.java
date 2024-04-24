@@ -8,7 +8,7 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cliente_dk;
+    private int dk;
     private String identificacion;
     private String nombres_cliente;
     private String apellidos_cliente;
@@ -29,12 +29,12 @@ public class Cliente {
     public Cliente() {
     }
 
-    public int getCliente_dk() {
-        return cliente_dk;
+    public int getDk() {
+        return dk;
     }
 
-    public void setCliente_dk(int cliente_dk) {
-        this.cliente_dk = cliente_dk;
+    public void setDk(int cliente_dk) {
+        this.dk = cliente_dk;
     }
 
     public String getIdentificacion() {

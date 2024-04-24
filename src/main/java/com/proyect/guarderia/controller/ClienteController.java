@@ -34,6 +34,16 @@ public class ClienteController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
         }
     }
+    @GetMapping("/clientes/dk/{dk}")
+    public ResponseEntity<Object> getClienteDk(@PathVariable String dk){
+        Cliente cliente = repository.findByDk(Integer.parseInt(dk));
+        if (cliente != null) {
+            return ResponseEntity.ok(cliente);
+        } else {
+            String mensajeError = "El cliente con identificación " + dk + " no se encontró.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
+        }
+    }
     
     @PutMapping("/clientes/{identificacion}")
     public ResponseEntity<Object> updateCliente(@PathVariable String identificacion, @RequestBody Cliente cliente) {

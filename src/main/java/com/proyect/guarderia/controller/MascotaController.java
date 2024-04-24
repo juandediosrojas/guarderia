@@ -3,6 +3,7 @@ package com.proyect.guarderia.controller;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,10 +36,10 @@ public class MascotaController {
     }
 
     @PostMapping("/mascotas")
-    public ResponseEntity<Object> createCliente(@RequestBody Mascota mascota) {
-        try {
+    public ResponseEntity<Object> createMascota(@RequestBody Mascota mascota) {
+        try {            
             Mascota nuevoMascota = repository.save(mascota);
-            return ResponseEntity.ok(nuevoMascota);
+            return ResponseEntity.ok("La mascota " + nuevoMascota.getNombre() + " ha sido creado con éxito");
         } catch (DataIntegrityViolationException e) {
             if (e.getCause() instanceof ConstraintViolationException) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -50,6 +51,24 @@ public class MascotaController {
         }
     }
     
+    @PutMapping("/mascotas/{identificacion}")
+    public ResponseEntity<Object> updateMascota(@PathVariable String identificacion, @RequestBody Mascota mascota) {
+        Mascota existingMascota = repository.findByIdentifiacion(Integer.parseInt(identificacion));
+        if (existingMascota != null) {
+
+            existingMascota.setNombre(mascota.getNombre());
+            existingMascota.setEspecie(mascota.getEspecie());
+            existingMascota.setRaza(mascota.getRaza());
+            existingMascota.setCliente_fk(mascota.getCliente_fk());;
+
+            Mascota updatedCliente = repository.save(existingMascota);
+            return ResponseEntity.ok(updatedCliente);
+        } else {
+            String mensajeError = "Las mascota con identificación " + identificacion + " no se encontró.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(mensajeError);
+        }
+    }
+
     @DeleteMapping("/mascotas/{dk}")
     public ResponseEntity<Object> deleteMascota(@PathVariable String dk) {
         Mascota mascota = repository.findByDk(Integer.parseInt(dk));
